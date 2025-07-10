@@ -1,4 +1,3 @@
-
 import streamlit as st
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -31,7 +30,7 @@ else:
     # ISIN-Eingabe mit schmalerer Box
     st.markdown("""
         <style>
-        div[data-testid="stTextInput"] input {
+        div[data-testid=\"stTextInput\"] input {
             width: 300px;
         }
         </style>
@@ -59,7 +58,6 @@ else:
                 </div>
             """, unsafe_allow_html=True)
 
-            # Buffer für kombinierten Report vorbereiten
             combined_figs = []
 
             for column in spalten:
@@ -72,7 +70,7 @@ else:
                 col1, col2 = st.columns([3, 1])
 
                 with col1:
-                    fig, ax = plt.subplots(figsize=(10, 4.5))
+                    fig, ax = plt.subplots(figsize=(8, 3.5))
                     ax.hist(subset[column], bins=10, edgecolor='black', alpha=0.3, label='Verteilung')
 
                     ax.axvline(user_value, color='red', linestyle='--', linewidth=2, label='Wert zur ISIN')
@@ -86,21 +84,21 @@ else:
 
                     st.pyplot(fig)
 
-                    # Grafik für PDF vorbereiten
                     fig.tight_layout()
                     buf = io.BytesIO()
                     fig.savefig(buf, format='png')
                     buf.seek(0)
                     img = Image.open(buf).convert("RGB")
 
-                    # Infokasten
                     draw = ImageDraw.Draw(img)
                     font = ImageFont.load_default()
 
-                    # Hauptinfo-Kasten
-                    box_x = img.width - 850
-                    box_y = 10
-                    draw.rectangle([box_x, box_y, box_x + 400, box_y + 150], fill="#e0e0e0")
+                    # Info-Kasten
+                    info_x = img.width - 420
+                    info_y = 20
+                    info_w = 400
+                    info_h = 150
+                    draw.rectangle([info_x, info_y, info_x + info_w, info_y + info_h], outline="black", width=1)
                     info_lines = [
                         f"ISIN: {user_isin}",
                         f"{column}: {user_value}",
@@ -110,20 +108,20 @@ else:
                         f"{percentile:.1f}% der Werte sind kleiner"
                     ]
                     for i, line in enumerate(info_lines):
-                        draw.text((box_x + 10, box_y + 10 + i * 17), line, fill="black", font=font)
+                        draw.text((info_x + 10, info_y + 10 + i * 17), line, fill="black", font=font)
 
-                    # Separater Legendenkasten
-                    leg_x = img.width - 420
-                    leg_y = 10
-                    draw.rectangle([leg_x, leg_y, leg_x + 400, leg_y + 100], fill="#f0f0f0")
+                    # Legenden-Kasten darunter
+                    legend_y = info_y + info_h + 10
+                    legend_h = 80
+                    draw.rectangle([info_x, legend_y, info_x + info_w, legend_y + legend_h], outline="black", width=1)
                     legend_lines = [
                         "Legende:",
-                        "- Rot: Wert zur ISIN",
-                        "- Grün: Mittelwert",
-                        "- Blau: Median"
+                        "-- Rot: Wert zur ISIN",
+                        ":  Grün: Mittelwert",
+                        "-. Blau: Median"
                     ]
                     for j, line in enumerate(legend_lines):
-                        draw.text((leg_x + 10, leg_y + 10 + j * 17), line, fill="black", font=font)
+                        draw.text((info_x + 10, legend_y + 10 + j * 17), line, fill="black", font=font)
 
                     combined_figs.append(img)
 
