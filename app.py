@@ -36,7 +36,7 @@ else:
         </style>
     """, unsafe_allow_html=True)
 
-    user_isin = st.text_input("Bitte gib die ISIN ein:").strip().upper()
+    user_isin = st.text_input("Bitte geben Sie eine ISIN ein:").strip().upper()
 
     if st.button("Analyse starten"):
         if user_isin not in data['ISIN'].values:
