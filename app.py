@@ -7,7 +7,7 @@ import io
 from PIL import Image, ImageDraw, ImageFont
 
 st.set_page_config(layout="wide")
-st.title("Analyse EET Daten")
+st.title("Analyse EET-Daten")
 
 # Excel-Datei laden (muss im Projektverzeichnis liegen)
 excel_path = "EET_Beispieldaten_100_ISINs_variiert.xlsx"
