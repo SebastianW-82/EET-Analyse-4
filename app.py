@@ -40,7 +40,7 @@ else:
 
     if st.button("Analyse starten"):
         if user_isin not in data['ISIN'].values:
-            st.error("ISIN nicht gefunden. Bitte überprüfe deine Eingabe.")
+            st.error("ISIN nicht gefunden. Bitte überprüfe Sie Ihre Eingabe.")
         else:
             user_row = data[data['ISIN'] == user_isin].iloc[0]
             user_klassifikation = user_row['Klassifikation']
